@@ -21,7 +21,9 @@ const update = async (req, res) => {
 
 const show = async (req, res) => {
   try {
-    const user = await UserModel.findById(req.params.id);
+    const user = await UserModel
+      .findById(req.params.id)
+      .populate('channels');
     if (!user) {
       return res.sendStatus(404).send({ message: 'User not found!' });
     }
