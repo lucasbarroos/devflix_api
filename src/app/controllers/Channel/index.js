@@ -34,7 +34,7 @@ const show = async (req, res) => {
 
 const index = async (req, res) => {
   try {
-    const channels = await ChannelModel.find();
+    const channels = await ChannelModel.find().populate('channel');
     return res.send(channels);
   } catch (err) {
     return res.sendStatus(400).send({ message: 'Error to show the channels!' });
