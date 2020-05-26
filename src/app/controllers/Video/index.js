@@ -22,7 +22,8 @@ const update = async (req, res) => {
 
 const show = async (req, res) => {
   try {
-    const video = await VideoModel.findById(req.params.id);
+    const video = await VideoModel.findById(req.params.id)
+      .populate('channel');
     if (!video) {
       return res.sendStatus(404).send({ message: 'Video not found!' });
     }
