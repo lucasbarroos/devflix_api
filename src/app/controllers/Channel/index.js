@@ -15,7 +15,6 @@ const update = async (req, res) => {
       .findOneAndUpdate({ _id: req.params.id }, req.body, { new: true });
     return res.send(channel);
   } catch (err) {
-    console.log(err);
     return res.sendStatus(400).send({ message: 'Error to update the channel!' });
   }
 };
@@ -46,7 +45,6 @@ const destroy = async (req, res) => {
     const channel = await ChannelModel.findByIdAndDelete(req.params.id);
     return res.send(channel);
   } catch (err) {
-    console.log(err);
     return res.sendStatus(400).send({ message: 'Error to delete the channel!' });
   }
 };

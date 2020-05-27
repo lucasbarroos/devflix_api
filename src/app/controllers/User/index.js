@@ -14,7 +14,6 @@ const update = async (req, res) => {
     const user = await UserModel.findOneAndUpdate({ _id: req.params.id }, req.body, { new: true });
     return res.send(user);
   } catch (err) {
-    console.log(err);
     return res.sendStatus(400).send({ message: 'Error to update the user!' });
   }
 };
@@ -47,7 +46,6 @@ const destroy = async (req, res) => {
     const user = await UserModel.findByIdAndDelete(req.params.id);
     return res.send(user);
   } catch (err) {
-    console.log(err);
     return res.sendStatus(400).send({ message: 'Error to delete the user!' });
   }
 };

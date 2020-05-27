@@ -15,7 +15,6 @@ const update = async (req, res) => {
       .findOneAndUpdate({ _id: req.params.id }, req.body, { new: true });
     return res.send(video);
   } catch (err) {
-    console.log(err);
     return res.sendStatus(400).send({ message: 'Error to update the video!' });
   }
 };
@@ -47,7 +46,6 @@ const destroy = async (req, res) => {
     const video = await VideoModel.findByIdAndDelete(req.params.id);
     return res.send(video);
   } catch (err) {
-    console.log(err);
     return res.sendStatus(400).send({ message: 'Error to delete the video!' });
   }
 };
