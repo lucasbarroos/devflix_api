@@ -34,7 +34,9 @@ const show = async (req, res) => {
 
 const index = async (req, res) => {
   try {
-    const videos = await VideoModel.find().populate('channel');
+    const filter = {};
+    if (req.query.channel) filter.channel = req.query.channel;
+    const videos = await VideoModel.find(filter).populate('channel');
     return res.send(videos);
   } catch (err) {
     return res.sendStatus(400).send({ message: 'Error to show the videos!' });
