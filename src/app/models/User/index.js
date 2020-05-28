@@ -7,6 +7,7 @@ const userSchema = new Schema({
   name: String,
   email: { type: String, required: true },
   profession: String,
+  picture: String,
   channels: [{
     type: Schema.ObjectId, ref: 'channels',
   }],
