@@ -16,7 +16,6 @@ const userSchema = new Schema({
 
 // eslint-disable-next-line func-names
 userSchema.pre('save', async function (next) {
-  console.log(this.password);
   this.password = await bcrypt.hash(this.password, 10);
   next();
 });

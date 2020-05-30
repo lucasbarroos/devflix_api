@@ -92,17 +92,17 @@ const login = async (req, res) => {
     } = req.body;
 
     if (!email || !password) {
-      return res.status(400).send({ message: 'Missing fields login!' });
+      return res.status(400).send({ error: 'Missing fields login!' });
     }
 
     const user = await UserModel.findOne({ email });
 
     if (!user) {
-      return res.status(400).send({ message: "User doesn't registered!" });
+      return res.status(401).send({ error: "User doesn't registered!" });
     }
 
     if (!await bcrypt.compare(password, user.password)) {
-      return res.status(401).send({ message: 'Incorrect email or password!' });
+      return res.status(401).send({ error: 'Incorrect email or password!' });
     }
 
     delete user.password;
@@ -110,7 +110,7 @@ const login = async (req, res) => {
     return res.send(user);
   } catch (err) {
     console.log(err);
-    return res.status(400).send({ message: 'Error to login!' });
+    return res.status(400).send({ error: 'Error to login!' });
   }
 };
 
