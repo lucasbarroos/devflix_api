@@ -5,7 +5,7 @@ const URL = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${p
 const connectionOptions = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  useFindAndModify: true,
+  useFindAndModify: false,
 };
 
 const connect = async () => {

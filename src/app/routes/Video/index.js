@@ -9,4 +9,7 @@ router.get('/video/:id', VideoController.show);
 router.get('/videos', VideoController.index);
 router.delete('/video/:id', VideoController.destroy);
 
+// Logic of the video
+router.patch('/recommend_video/:id', VideoController.recommendVideo);
+
 module.exports = router;
