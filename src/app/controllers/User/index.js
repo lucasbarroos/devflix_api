@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 
 const UserModel = require('../../models/User/index');
+const VideoModel = require('../Video/index');
 
 const store = async (req, res) => {
   try {
@@ -49,6 +50,25 @@ const destroy = async (req, res) => {
     return res.send(user);
   } catch (err) {
     return res.status(400).send({ message: 'Error to delete the user!' });
+  }
+};
+
+const recommend = async (req, res) => {
+  try {
+    const user = await UserModel.findById(req.params.userId);
+    const video = await VideoModel.findById(req.params.videoId);
+
+    if (!user) return res.sendStatus(400).find({ message: 'User not found' });
+
+    if (!video) return res.sendStatus(400).find({ message: 'Video not found' });
+
+    const newUser = await UserModel
+      .findOneAndUpdate({ _id: req.params.userId },
+        { recommendedVideos: { $push: video } });
+
+    return res.send(newUser);
+  } catch (err) {
+    return res.status(400).send({ message: 'Error to recommend the video!' });
   }
 };
 
@@ -120,6 +140,7 @@ module.exports = {
   show,
   index,
   destroy,
+  recommend,
   login,
   register,
 };

@@ -11,6 +11,9 @@ const userSchema = new Schema({
   channels: [{
     type: Schema.ObjectId, ref: 'channels',
   }],
+  recommendedVideos: [{
+    type: Schema.ObjectId, ref: 'videos',
+  }],
   password: { type: String, required: true },
 });
 

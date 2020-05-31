@@ -12,4 +12,8 @@ router.get('/user/:id', UserController.show);
 router.get('/users', UserController.index);
 router.delete('/user/:id', UserController.destroy);
 
+
+// Logic of the user videos
+router.patch('/recommend_video/:userId/:videoId', UserController.recommendVideo);
+
 module.exports = router;
