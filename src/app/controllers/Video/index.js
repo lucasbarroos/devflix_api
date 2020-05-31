@@ -23,9 +23,26 @@ const show = async (req, res) => {
   try {
     const video = await VideoModel.findById(req.params.id)
       .populate('channel');
+
     if (!video) {
       return res.sendStatus(404).send({ message: 'Video not found!' });
     }
+
+    await VideoModel
+      .findOneAndUpdate(
+        { _id: req.params.id },
+        {
+          video_analytics:
+          {
+            views: video.video_analytics.views + 1,
+            recommended: video.video_analytics.recommended,
+          },
+        },
+        {
+          new: true,
+        },
+      );
+
     return res.send(video);
   } catch (err) {
     return res.sendStatus(400).send({ message: 'Error to get the video!' });
@@ -52,10 +69,38 @@ const destroy = async (req, res) => {
   }
 };
 
+const recommendVideo = async (req, res) => {
+  try {
+    const video = await VideoModel.findById(req.params.id);
+
+    if (!video) return res.sendStatus(404).send({ message: 'Video not found!' });
+
+    const newVideo = await VideoModel
+      .findOneAndUpdate(
+        { _id: req.params.id },
+        {
+          video_analytics:
+          {
+            views: video.video_analytics.views,
+            recommended: video.video_analytics.recommended + 1,
+          },
+        },
+        {
+          new: true,
+        },
+      );
+
+    return res.send(newVideo);
+  } catch (err) {
+    return res.sendStatus(400).send({ message: 'Error to recommend the video!' });
+  }
+};
+
 module.exports = {
   store,
   update,
   show,
   index,
   destroy,
+  recommendVideo,
 };
