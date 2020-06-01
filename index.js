@@ -14,7 +14,7 @@ app.use(routes);
 
 database.connect();
 
-app.listen(process.env.PORT, process.env.URL, ((err) => {
+app.listen(process.env.PORT, ((err) => {
   if (err) console.log('Error to run the application');
 }));
 
