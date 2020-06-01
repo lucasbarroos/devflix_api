@@ -29,6 +29,9 @@ const show = async (req, res) => {
       return res.sendStatus(404).send({ message: 'Video not found!' });
     }
 
+    const subs = await UserModel
+      .countDocuments({ channels: { $in: video.channel._id } });
+
     await VideoModel
       .findOneAndUpdate(
         { _id: req.params.id },
@@ -44,7 +47,7 @@ const show = async (req, res) => {
         },
       );
 
-    return res.send(video);
+    return res.send({ video, subs });
   } catch (err) {
     return res.sendStatus(400).send({ message: 'Error to get the video!' });
   }
