@@ -13,7 +13,8 @@ app.use(bodyParser.json());
 app.use(routes);
 
 database.connect();
-app.listen(process.env.PORT, 'localhost', ((err) => {
+
+app.listen(process.env.PORT, process.env.URL, ((err) => {
   if (err) console.log('Error to run the application');
 }));
 
