@@ -87,7 +87,6 @@ const subscribeByVideo = async (req, res) => {
 
     return res.sendStatus(200);
   } catch (err) {
-    console.log(err);
     return res.status(400).send({ message: 'Error to subscribe in the channel!' });
   }
 };
