@@ -1,4 +1,5 @@
 const VideoModel = require('../../models/Video/index');
+const UserModel = require('../../models/User/index');
 
 const store = async (req, res) => {
   try {
@@ -72,8 +73,11 @@ const destroy = async (req, res) => {
 const recommendVideo = async (req, res) => {
   try {
     const video = await VideoModel.findById(req.params.id);
+    const user = await UserModel.findById(req.params.userId);
 
-    if (!video) return res.sendStatus(404).send({ message: 'Video not found!' });
+    if (!video) return res.sendStatus(400).send({ message: 'Video not found!' });
+
+    if (!user) return res.sendStatus(400).find({ message: 'User not found' });
 
     const newVideo = await VideoModel
       .findOneAndUpdate(
@@ -88,11 +92,27 @@ const recommendVideo = async (req, res) => {
         {
           new: true,
         },
-      );
+      ).populate('channel');
+
+    await UserModel.findOneAndUpdate({ _id: req.params.userId },
+      { $push: { recommendedVideos: video } }); // Inserting the channel in the user list
 
     return res.send(newVideo);
   } catch (err) {
     return res.sendStatus(400).send({ message: 'Error to recommend the video!' });
+  }
+};
+
+const checkRecommendVideo = async (req, res) => {
+  try {
+    const user = await UserModel
+      .findOne({ _id: req.params.userId, recommendedVideos: { $in: req.params.id } });
+
+    if (!user) return res.sendStatus(400);
+
+    return res.sendStatus(200);
+  } catch (err) {
+    return res.sendStatus(400).send({ message: 'Error to find the recommended the video!' });
   }
 };
 
@@ -103,4 +123,5 @@ module.exports = {
   index,
   destroy,
   recommendVideo,
+  checkRecommendVideo,
 };
