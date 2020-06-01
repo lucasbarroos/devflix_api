@@ -91,11 +91,30 @@ const subscribeByVideo = async (req, res) => {
   }
 };
 
-const isSubscribedUser = async (req, res) => {
+const isSubscribedUserByVideo = async (req, res) => {
   try {
     const video = await VideoModel.findById(req.params.id);
 
     const channel = await ChannelModel.findById(video.channel);
+
+    if (!channel) return res.status(404).send({ message: 'Channel not found!' });
+
+    const user = await UserModel
+      .findOne({ _id: req.params.userId, channels: { $in: channel._id } });
+
+    if (!user) {
+      return res.status(200).send({ subscribed: false });
+    }
+
+    return res.status(200).send({ subscribed: true });
+  } catch (err) {
+    return res.status(400).send({ message: 'Error to subscribe in the channel!' });
+  }
+};
+
+const isSubscribedUser = async (req, res) => {
+  try {
+    const channel = await ChannelModel.findById(req.params.id);
 
     if (!channel) return res.status(404).send({ message: 'Channel not found!' });
 
@@ -136,5 +155,6 @@ module.exports = {
   subscribe,
   subscribeByVideo,
   isSubscribedUser,
+  isSubscribedUserByVideo,
   getSubscribedTotal,
 };

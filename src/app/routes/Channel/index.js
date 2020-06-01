@@ -13,6 +13,7 @@ router.delete('/channel/:id', ChannelController.destroy);
 router.patch('/subscribe/:id/:userId', ChannelController.subscribe);
 router.patch('/subscribe_by_video/:id/:userId', ChannelController.subscribeByVideo);
 router.get('/subscribe/:id/:userId', ChannelController.isSubscribedUser);
+router.get('/subscribe_by_video/:id/:userId', ChannelController.isSubscribedUserByVideo);
 router.get('/subscribers_quant/:id', ChannelController.getSubscribedTotal);
 
 module.exports = router;
