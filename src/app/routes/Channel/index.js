@@ -9,4 +9,9 @@ router.get('/channel/:id', ChannelController.show);
 router.get('/channels', ChannelController.index);
 router.delete('/channel/:id', ChannelController.destroy);
 
+// Logic to the video subs
+router.patch('/subscribe/:id/:userId', ChannelController.subscribe);
+router.get('/is_subscribed/:id/:userId', ChannelController.isSubscribedUser);
+router.get('/subscribers_quant/:id', ChannelController.getSubscribedTotal);
+
 module.exports = router;

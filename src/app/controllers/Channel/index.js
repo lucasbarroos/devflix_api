@@ -1,4 +1,5 @@
 const ChannelModel = require('../../models/Channel/index');
+const UserModel = require('../../models/User/index');
 
 const store = async (req, res) => {
   try {
@@ -49,10 +50,65 @@ const destroy = async (req, res) => {
   }
 };
 
+const subscribe = async (req, res) => {
+  try {
+    const channel = await ChannelModel.findById(req.params.id);
+    const user = await UserModel.findById(req.params.userId);
+
+    if (!channel) return res.sendStatus(400).send({ message: 'Channel not found!' });
+
+    if (!user) return res.sendStatus(400).send({ message: 'User not found!' });
+
+    await UserModel
+      .findOneAndUpdate({ _id: req.params.userId }, { channels: { $push: channel } });
+
+    return res.sendStatus(200);
+  } catch (err) {
+    return res.sendStatus(400).send({ message: 'Error to subscribe in the channel!' });
+  }
+};
+
+const isSubscribedUser = async (req, res) => {
+  try {
+    const channel = await ChannelModel.findById(req.params.id);
+
+    if (!channel) return res.sendStatus(400).send({ message: 'Channel not found!' });
+
+    const user = await UserModel
+      .findOne({ _id: req.params.userId, channels: { $in: req.params.id } });
+
+    if (!user) {
+      return res.sendStatus(400).send({ subscribed: false });
+    }
+
+    return res.sendStatus(200);
+  } catch (err) {
+    return res.sendStatus(400).send({ message: 'Error to subscribe in the channel!' });
+  }
+};
+
+const getSubscribedTotal = async (req, res) => {
+  try {
+    const channel = await ChannelModel.findById(req.params.id);
+
+    if (!channel) return res.sendStatus(400).send({ message: 'Channel not found!' });
+
+    const quant = await UserModel
+      .countDocuments({ channels: { $in: req.params.id } });
+
+    return res.send({ quant });
+  } catch (err) {
+    return res.sendStatus(400).send({ message: 'Error to get the information about the channel!' });
+  }
+};
+
 module.exports = {
   store,
   update,
   show,
   index,
   destroy,
+  subscribe,
+  isSubscribedUser,
+  getSubscribedTotal,
 };
